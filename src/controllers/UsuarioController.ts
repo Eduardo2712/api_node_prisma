@@ -27,7 +27,7 @@ class UsuarioController {
                     id: Number(id),
                 },
             });
-            return res.status(500).json(usuario);
+            return res.status(200).json(usuario);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
@@ -42,13 +42,51 @@ class UsuarioController {
         try {
             novoUsuario["ativo"] = 1;
             novoUsuario["id_senha"] = Math.floor(Math.random() * 1000) + 1;
+            // novoUsuario["senha"] = await Criptografia.criptografaPalavra(
+            //     `${novoUsuario["id_senha"]}${novoUsuario["senha"]}`
+            // );
+            // novoUsuario["login"] = await Criptografia.criptografaPalavra(
+            //     `${novoUsuario["id_senha"]}${novoUsuario["login"]}`
+            // );
             novoUsuario["senha"] = await Criptografia.criptografaPalavra(
-                `${novoUsuario["id_senha"]}${novoUsuario["senha"]}`
+                novoUsuario["senha"]
+            );
+            novoUsuario["login"] = await Criptografia.criptografaPalavra(
+                novoUsuario["login"]
             );
             const novoUsuarioCriado = await prisma.usuarios.create({
                 data: novoUsuario,
             });
-            return res.status(200).json(novoUsuarioCriado);
+            return res.status(201).json(novoUsuarioCriado);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                return res.status(500).json(error);
+            } else if (error instanceof Error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    };
+
+    static login = async (req: Request, res: Response) => {
+        const dados = req.body;
+        try {
+            const usuario = await prisma.usuarios.findFirst({
+                where: {
+                    login: await Criptografia.criptografaPalavra(
+                        dados["login"]
+                    ),
+                    senha: await Criptografia.criptografaPalavra(
+                        dados["senha"]
+                    ),
+                },
+            });
+            if (usuario === null) {
+                return res.status(200).json({
+                    mensagem: "Usuário não existe",
+                });
+            } else {
+                return res.status(200).json(usuario);
+            }
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);

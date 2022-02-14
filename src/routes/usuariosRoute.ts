@@ -9,6 +9,7 @@ router.use(cors());
 router
     .get("/usuarios", usuarioController.pegarTodosOsUsuarios)
     .get("/usuarios/:id", usuarioController.pegarUmUsuario)
-    .post("/usuarios/criar", usuarioController.criarUmUsuario);
+    .post("/usuarios/criar", usuarioController.criarUmUsuario)
+    .post("/usuarios/login", usuarioController.login);
 
 module.exports = router;
