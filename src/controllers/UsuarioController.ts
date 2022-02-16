@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 const Criptografia = require("../funcoes/Criptografia");
 
 const prisma = new PrismaClient();
+const jwt = require("jsonwebtoken");
 
 class UsuarioController {
     static pegarTodosOsUsuarios = async (req: Request, res: Response) => {
@@ -69,6 +70,7 @@ class UsuarioController {
 
     static login = async (req: Request, res: Response) => {
         const dados = req.body;
+        const chave_token = process.env.CHAVE_TOKEN;
         try {
             const usuario = await prisma.usuarios.findFirst({
                 where: {
@@ -80,12 +82,16 @@ class UsuarioController {
                     ),
                 },
             });
-            if (usuario === null) {
-                return res.status(200).json({
-                    mensagem: "Usuário não existe",
+            if (usuario !== null && usuario !== undefined) {
+                const token = jwt.sign({ userId: usuario.id }, chave_token, {
+                    expiresIn: 300,
                 });
+                return res.status(200).json({ autorizacao: true, token });
             } else {
-                return res.status(200).json(usuario);
+                return res.status(200).json({
+                    autorizacao: false,
+                    mensagem: "Usuário não autorizado",
+                });
             }
         } catch (error: unknown) {
             if (typeof error === "string") {
