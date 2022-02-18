@@ -70,7 +70,7 @@ class UsuarioController {
 
     static login = async (req: Request, res: Response) => {
         const dados = req.body;
-        const chave_token = process.env.CHAVE_TOKEN;
+        const chaveToken = process.env.CHAVE_TOKEN;
         try {
             const usuario = await prisma.usuarios.findFirst({
                 where: {
@@ -83,7 +83,7 @@ class UsuarioController {
                 },
             });
             if (usuario !== null && usuario !== undefined) {
-                const token = jwt.sign({ userId: usuario.id }, chave_token, {
+                const token = jwt.sign({ userId: usuario.id }, chaveToken, {
                     expiresIn: 300,
                 });
                 return res.status(200).json({ autorizacao: true, token });

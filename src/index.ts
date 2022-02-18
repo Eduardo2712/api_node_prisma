@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 
-const prisma = new PrismaClient();
 require("dotenv").config();
+
+const prisma = new PrismaClient();
 const app = express();
 const routes = require("./routes");
 const porta = process.env.PORTA;

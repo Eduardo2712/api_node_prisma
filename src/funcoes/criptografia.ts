@@ -1,13 +1,13 @@
 const crypto = require("crypto");
-const algoritmo_criptografia = "sha256";
+const algoritmoCriptografia = "sha256";
 
 class Criptografia {
     static criptografaPalavra = async (palavra: string) => {
-        const palavra_criptografada = crypto
-            .createHmac(algoritmo_criptografia, process.env.CHAVE_CRIPTOGRAFIA)
+        const palavraCriptografada = crypto
+            .createHmac(algoritmoCriptografia, process.env.CHAVE_CRIPTOGRAFIA)
             .update(palavra)
             .digest("hex");
-        return palavra_criptografada;
+        return palavraCriptografada;
     };
 }
 

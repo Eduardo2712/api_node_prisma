@@ -1,13 +1,13 @@
-const { Router } = require("express");
-const cors = require("cors");
+const expressUsuarios = require("express");
+// const cors = require("cors");
 const usuarioController = require("../controllers/UsuarioController");
 const verificaToken = require("../funcoes/VerificaToken");
 
-const router = Router();
+const routerUsuarios = expressUsuarios.Router();
 
-router.use(cors());
+// router.use(cors());
 
-router
+routerUsuarios
     .get(
         "/usuarios",
         verificaToken.verificaToken,
@@ -21,4 +21,4 @@ router
     .post("/usuarios/criar", usuarioController.criarUmUsuario)
     .post("/usuarios/login", usuarioController.login);
 
-module.exports = router;
+module.exports = routerUsuarios;

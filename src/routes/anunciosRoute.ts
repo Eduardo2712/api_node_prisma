@@ -1,11 +1,16 @@
-const { Router } = require("express");
-const cors = require("cors");
+const expressAnuncios = require("express");
+// const cors = require("cors");
 const anuncioController = require("../controllers/AnuncioController");
 
-const router = Router();
+const routerAnuncios = expressAnuncios.Router();
 
-router.use(cors());
+// router.use(cors());
 
-router.get("/anuncios/:id", anuncioController.pegarUmAnuncio);
+routerAnuncios
+    .get("/anuncios/:id", anuncioController.pegarUmAnuncio)
+    .get(
+        "/anuncios_pagina/:quantidade/:pagina",
+        anuncioController.pegarAnunciosPorPagina
+    );
 
-module.exports = router;
+module.exports = routerAnuncios;
