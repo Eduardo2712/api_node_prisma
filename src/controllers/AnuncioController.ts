@@ -6,6 +6,11 @@ const prisma = new PrismaClient();
 class AnuncioController {
     static pegarUmAnuncio = async (req: Request, res: Response) => {
         const { id } = req.params;
+        if (isNaN(Number(id))) {
+            return res.status(400).json({
+                mensagem: "Parâmetro passado não é um número",
+            });
+        }
         try {
             const anuncio = await prisma.anuncios.findUnique({
                 where: {
@@ -35,6 +40,11 @@ class AnuncioController {
 
     static pegarAnunciosPorPagina = async (req: Request, res: Response) => {
         const { quantidade, pagina } = req.params;
+        if (isNaN(Number(quantidade)) || isNaN(Number(pagina))) {
+            return res.status(400).json({
+                mensagem: "Parâmetro passado não é um número",
+            });
+        }
         try {
             const anuncios = await prisma.anuncios.findMany({
                 where: {
@@ -54,6 +64,34 @@ class AnuncioController {
                     mensagem: "Nenhum anúncio existente",
                 });
             }
+            return res.status(200).json(anuncios);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                return res.status(500).json(error);
+            } else if (error instanceof Error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    };
+
+    static pegarAnunciosRecentes = async (req: Request, res: Response) => {
+        const { quantidade } = req.params;
+        if (isNaN(Number(quantidade))) {
+            return res.status(400).json({
+                mensagem: "Parâmetro passado não é um número",
+            });
+        }
+        try {
+            const anuncios = await prisma.anuncios.findMany({
+                where: {
+                    ativo: 1,
+                },
+                orderBy: {
+                    data_criado: "desc",
+                },
+                skip: 0,
+                take: Number(quantidade),
+            });
             return res.status(200).json(anuncios);
         } catch (error: unknown) {
             if (typeof error === "string") {
