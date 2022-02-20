@@ -1,6 +1,9 @@
 const crypto = require("crypto");
 const algoritmoCriptografia = "sha256";
 
+const dataAtual = new Date(Date.now());
+dataAtual.setHours(dataAtual.getHours() - 3);
+
 const criptografaPalavra = (palavra: string) => {
     const palavraCriptografada = crypto
         .createHmac(algoritmoCriptografia, process.env.CHAVE_CRIPTOGRAFIA)
@@ -19,6 +22,8 @@ export const usuariosSemente = [
         cpf: "901.259.300-02",
         login: criptografaPalavra("Elvis1234"),
         senha: criptografaPalavra("Elvis1234"),
+        data_criado: dataAtual,
+        data_atualizado: dataAtual,
     },
     {
         nome: "Lionel Messi",
@@ -29,6 +34,8 @@ export const usuariosSemente = [
         cpf: "056.236.910-62",
         login: criptografaPalavra("Messi1234"),
         senha: criptografaPalavra("Messi1234"),
+        data_criado: dataAtual,
+        data_atualizado: dataAtual,
     },
     {
         nome: "John Lennon",
@@ -39,6 +46,8 @@ export const usuariosSemente = [
         cpf: "454.789.123-02",
         login: criptografaPalavra("Lennon1234"),
         senha: criptografaPalavra("Lennon1234"),
+        data_criado: dataAtual,
+        data_atualizado: dataAtual,
     },
     {
         nome: "Nico Robin",
@@ -49,5 +58,7 @@ export const usuariosSemente = [
         cpf: "746.798.543-10",
         login: criptografaPalavra("Nico1234"),
         senha: criptografaPalavra("Nico1234"),
+        data_criado: dataAtual,
+        data_atualizado: dataAtual,
     },
 ];

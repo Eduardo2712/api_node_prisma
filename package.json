@@ -2,12 +2,12 @@
   "name": "api_node_prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts-node": "ts-node --compiler-options {\"module\":\"CommonJS\"}"
   },
