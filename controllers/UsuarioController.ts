@@ -43,17 +43,8 @@ class UsuarioController {
         try {
             novoUsuario["ativo"] = 1;
             novoUsuario["id_senha"] = Math.floor(Math.random() * 1000) + 1;
-            // novoUsuario["senha"] = await Criptografia.criptografaPalavra(
-            //     `${novoUsuario["id_senha"]}${novoUsuario["senha"]}`
-            // );
-            // novoUsuario["login"] = await Criptografia.criptografaPalavra(
-            //     `${novoUsuario["id_senha"]}${novoUsuario["login"]}`
-            // );
             novoUsuario["senha"] = await Criptografia.criptografaPalavra(
-                novoUsuario["senha"]
-            );
-            novoUsuario["login"] = await Criptografia.criptografaPalavra(
-                novoUsuario["login"]
+                `${novoUsuario["id_senha"]}${novoUsuario["senha"]}`
             );
             const novoUsuarioCriado = await prisma.usuarios.create({
                 data: novoUsuario,
@@ -71,22 +62,34 @@ class UsuarioController {
     static login = async (req: Request, res: Response) => {
         const dados = req.body;
         const chaveToken = process.env.CHAVE_TOKEN;
+        if (
+            typeof dados["senha"] === "undefined" &&
+            typeof dados["usuario"] === "undefined"
+        ) {
+            return res.status(400).json({
+                mensagem: "Senha e/ou usuário estão vazios",
+            });
+        }
         try {
             const usuario = await prisma.usuarios.findFirst({
                 where: {
                     login: await Criptografia.criptografaPalavra(
                         dados["login"]
                     ),
-                    senha: await Criptografia.criptografaPalavra(
-                        dados["senha"]
-                    ),
                 },
             });
             if (usuario !== null && usuario !== undefined) {
-                const token = jwt.sign({ userId: usuario.id }, chaveToken, {
-                    expiresIn: 300,
-                });
-                return res.status(200).json({ autorizacao: true, token });
+                const senha_digitada = await Criptografia.criptografaPalavra(
+                    `${usuario["id_senha"]}${dados["senha"]}`
+                );
+                if (senha_digitada === usuario["senha"]) {
+                    const token = jwt.sign({ userId: usuario.id }, chaveToken, {
+                        expiresIn: 300,
+                    });
+                    return res.status(200).json({ autorizacao: true, token });
+                } else {
+                    return res.status(200).json({ autorizacao: false });
+                }
             } else {
                 return res.status(200).json({
                     autorizacao: false,
