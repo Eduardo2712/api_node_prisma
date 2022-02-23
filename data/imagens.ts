@@ -4,7 +4,7 @@ dataAtual.setHours(dataAtual.getHours() - 3);
 export const imagensSemente = [
     {
         nome: "Casa10",
-        caminho: "Casa10",
+        caminho: "Casa10.jpg",
         id_anuncio: 1,
         principal: true,
         data_criado: dataAtual,
@@ -12,7 +12,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa11",
-        caminho: "Casa11",
+        caminho: "Casa11.jpg",
         id_anuncio: 1,
         principal: false,
         data_criado: dataAtual,
@@ -20,7 +20,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa20",
-        caminho: "Casa20",
+        caminho: "Casa20.jpg",
         id_anuncio: 2,
         principal: true,
         data_criado: dataAtual,
@@ -28,7 +28,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa30",
-        caminho: "Casa30",
+        caminho: "Casa30.jpg",
         id_anuncio: 3,
         principal: true,
         data_criado: dataAtual,
@@ -36,7 +36,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa31",
-        caminho: "Casa31",
+        caminho: "Casa31.jpg",
         id_anuncio: 3,
         principal: false,
         data_criado: dataAtual,
@@ -44,7 +44,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa40",
-        caminho: "Casa40",
+        caminho: "Casa40.jpg",
         id_anuncio: 4,
         principal: false,
         data_criado: dataAtual,
@@ -52,7 +52,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa41",
-        caminho: "Casa41",
+        caminho: "Casa41.jpg",
         id_anuncio: 4,
         principal: true,
         data_criado: dataAtual,
@@ -60,7 +60,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa42",
-        caminho: "Casa42",
+        caminho: "Casa42.jpg",
         id_anuncio: 4,
         principal: false,
         data_criado: dataAtual,
@@ -68,7 +68,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa50",
-        caminho: "Casa50",
+        caminho: "Casa50.jpg",
         id_anuncio: 5,
         principal: true,
         data_criado: dataAtual,
@@ -76,7 +76,7 @@ export const imagensSemente = [
     },
     {
         nome: "Casa60",
-        caminho: "Casa60",
+        caminho: "Casa60.jpg",
         id_anuncio: 6,
         principal: true,
         data_criado: dataAtual,

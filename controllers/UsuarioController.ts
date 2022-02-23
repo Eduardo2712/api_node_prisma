@@ -73,9 +73,7 @@ class UsuarioController {
         try {
             const usuario = await prisma.usuarios.findFirst({
                 where: {
-                    login: await Criptografia.criptografaPalavra(
-                        dados["login"]
-                    ),
+                    login: dados["login"],
                 },
             });
             if (usuario !== null && usuario !== undefined) {
