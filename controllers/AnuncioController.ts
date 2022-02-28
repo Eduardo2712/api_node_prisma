@@ -6,11 +6,6 @@ const prisma = new PrismaClient();
 class AnuncioController {
     static pegarUmAnuncio = async (req: Request, res: Response) => {
         const { id } = req.params;
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept"
-        );
         if (isNaN(Number(id))) {
             return res.status(400).json({
                 mensagem: "Parâmetro passado não é um número",
@@ -44,11 +39,6 @@ class AnuncioController {
 
     static pegarAnunciosPorPagina = async (req: Request, res: Response) => {
         const { quantidade, pagina } = req.params;
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept"
-        );
         if (isNaN(Number(quantidade)) || isNaN(Number(pagina))) {
             return res.status(400).json({
                 mensagem: "Parâmetro passado não é um número",
@@ -84,11 +74,6 @@ class AnuncioController {
 
     static pegarAnunciosRecentes = async (req: Request, res: Response) => {
         const { quantidade } = req.params;
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept"
-        );
         if (isNaN(Number(quantidade))) {
             return res.status(400).json({
                 mensagem: "Parâmetro passado não é um número",
@@ -122,11 +107,6 @@ class AnuncioController {
 
     static pegarAnunciosPatrocinados = async (req: Request, res: Response) => {
         const { quantidade } = req.params;
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept"
-        );
         if (isNaN(Number(quantidade))) {
             return res.status(400).json({
                 mensagem: "Parâmetro passado não é um número",

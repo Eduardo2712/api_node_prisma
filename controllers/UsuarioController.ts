@@ -60,11 +60,11 @@ class UsuarioController {
     };
 
     static login = async (req: Request, res: Response) => {
-        const dados = req.body;
+        const { dados } = req.body;
         const chaveToken = process.env.CHAVE_TOKEN;
         if (
             typeof dados["senha"] === "undefined" &&
-            typeof dados["usuario"] === "undefined"
+            typeof dados["login"] === "undefined"
         ) {
             return res.status(400).json({
                 mensagem: "Senha e/ou usuário estão vazios",
@@ -81,10 +81,18 @@ class UsuarioController {
                     `${usuario["id_senha"]}${dados["senha"]}`
                 );
                 if (senha_digitada === usuario["senha"]) {
-                    const token = jwt.sign({ userId: usuario.id }, chaveToken, {
-                        expiresIn: 300,
+                    const token = jwt.sign(
+                        { id_usuario: usuario.id, email: usuario.email },
+                        chaveToken,
+                        {
+                            expiresIn: 3000,
+                        }
+                    );
+                    return res.status(200).json({
+                        autorizacao: true,
+                        token,
+                        nome: usuario["nome"],
                     });
-                    return res.status(200).json({ autorizacao: true, token });
                 } else {
                     return res.status(200).json({ autorizacao: false });
                 }
