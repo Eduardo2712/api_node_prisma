@@ -6,7 +6,7 @@ const cors = require("cors");
 module.exports = (app: any) => {
     app.use(
         bodyParser.json(),
-        bodyParser.urlencoded({ extended: false }),
+        bodyParser.urlencoded({ extended: true }),
         usuarios,
         anuncios,
         cors()
