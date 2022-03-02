@@ -60,25 +60,26 @@ class UsuarioController {
     };
 
     static login = async (req: Request, res: Response) => {
-        // const { dados } = req.body;
+        const dados = req.body;
         const chaveToken = process.env.CHAVE_TOKEN;
         if (
-            typeof req.body["senha"] === "undefined" &&
-            typeof req.body["login"] === "undefined"
+            typeof dados["senha"] === "undefined" &&
+            typeof dados["login"] === "undefined"
         ) {
             return res.status(400).json({
                 mensagem: "Senha e/ou usuário estão vazios",
+                autorizacao: false,
             });
         }
         try {
             const usuario = await prisma.usuarios.findFirst({
                 where: {
-                    login: req.body["login"],
+                    login: dados["login"],
                 },
             });
-            if (usuario !== null && usuario !== undefined) {
+            if (usuario !== null && typeof usuario !== "undefined") {
                 const senha_digitada = await Criptografia.criptografaPalavra(
-                    `${usuario["id_senha"]}${req.body["senha"]}`
+                    `${usuario["id_senha"]}${dados["senha"]}`
                 );
                 if (senha_digitada === usuario["senha"]) {
                     const token = jwt.sign(
@@ -94,7 +95,10 @@ class UsuarioController {
                         nome: usuario["nome"],
                     });
                 } else {
-                    return res.status(200).json({ autorizacao: false });
+                    return res.status(200).json({
+                        autorizacao: false,
+                        mensagem: "Senha e/ou usuário errado(s)",
+                    });
                 }
             } else {
                 return res.status(200).json({
