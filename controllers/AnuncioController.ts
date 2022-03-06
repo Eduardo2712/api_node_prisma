@@ -18,8 +18,18 @@ class AnuncioController {
                 },
                 include: {
                     imagens: true,
-                    tipo_anuncios: true,
-                    usuarios: true,
+                    tipo_anuncios: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    usuarios: {
+                        select: {
+                            nome: true,
+                            email: true,
+                            telefone: true,
+                        },
+                    },
                 },
             });
             if (anuncio === null || typeof anuncio === "undefined") {
@@ -51,8 +61,18 @@ class AnuncioController {
                 },
                 include: {
                     imagens: true,
-                    tipo_anuncios: true,
-                    usuarios: true,
+                    tipo_anuncios: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    usuarios: {
+                        select: {
+                            nome: true,
+                            email: true,
+                            telefone: true,
+                        },
+                    },
                 },
                 skip: Number(quantidade) * Number(pagina),
                 take: Number(quantidade),
@@ -89,8 +109,18 @@ class AnuncioController {
                 },
                 include: {
                     imagens: true,
-                    tipo_anuncios: true,
-                    usuarios: true,
+                    tipo_anuncios: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    usuarios: {
+                        select: {
+                            nome: true,
+                            email: true,
+                            telefone: true,
+                        },
+                    },
                 },
                 skip: 0,
                 take: Number(quantidade),
@@ -123,8 +153,18 @@ class AnuncioController {
                 },
                 include: {
                     imagens: true,
-                    tipo_anuncios: true,
-                    usuarios: true,
+                    tipo_anuncios: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    usuarios: {
+                        select: {
+                            nome: true,
+                            email: true,
+                            telefone: true,
+                        },
+                    },
                 },
                 skip: 0,
                 take: Number(quantidade),
