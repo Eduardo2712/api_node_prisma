@@ -92,7 +92,13 @@ class UsuarioController {
                     return res.status(200).json({
                         autorizacao: true,
                         token,
-                        nome: usuario["nome"],
+                        usuario: {
+                            nome: usuario["nome"],
+                            id: usuario["id"],
+                            email: usuario["email"],
+                            telefone: usuario["telefone"],
+                            data_nasc: usuario["data_nasc"],
+                        },
                     });
                 } else {
                     return res.status(200).json({
