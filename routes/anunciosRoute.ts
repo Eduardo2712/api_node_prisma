@@ -16,6 +16,7 @@ routerAnuncios
     .get(
         "/anuncios_patrocinados/:quantidade",
         anuncioController.pegarAnunciosPatrocinados
-    );
+    )
+    .post("/criar_anuncio", anuncioController.criarAnuncio);
 
 module.exports = routerAnuncios;

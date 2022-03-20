@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
+const multer = require("multer");
+const multerDestino = multer({ dest: "public/imagens/" }).array("imagens");
 
 class AnuncioController {
     static pegarUmAnuncio = async (req: Request, res: Response) => {
@@ -170,6 +172,26 @@ class AnuncioController {
                 take: Number(quantidade),
             });
             return res.status(200).json(anuncios);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                return res.status(500).json(error);
+            } else if (error instanceof Error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    };
+
+    static criarAnuncio = async (req: Request, res: Response) => {
+        try {
+            multerDestino(req, res, (err: Error) => {
+                if (err instanceof multer.MulterError) {
+                    console.error(`Erro: ${err}`);
+                } else if (err) {
+                    console.error(`Erro: ${err}`);
+                }
+                console.log(req.body);
+            });
+            return res.status(200).json();
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
