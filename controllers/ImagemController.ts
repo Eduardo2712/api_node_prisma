@@ -1,37 +1,45 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-
-const prisma = new PrismaClient();
-const multer = require("multer");
-const multerDestino = multer({ dest: "./public/imagens" }).array("imagens");
+const formidable = require("formidable");
+const fs = require("fs");
+const form = new formidable.IncomingForm();
 
 class ImagemController {
-    static subirImagens = async (req: Request, res: Response) => {
+    static subirImagem = async (req: Request, res: Response) => {
         try {
-            // multer({
-            //     storage: multer.diskStorage({
-            //         destination: (req: any, file: any, cb: any) => {
-            //             cb(null, "./public/imagens");
-            //         },
-            //         filename: (req: any, file: any, cb: any) => {
-            //             cb(
-            //                 null,
-            //                 `${Date.now().toString()}_${file.originalname}`
-            //             );
-            //         },
-            //     }),
-            //     fileFilter: (req: any, file: any, cb: any) => {
-            //         const extensaoImagens = [
-            //             "image/png",
-            //             "image/jpg",
-            //             "image/jpeg",
-            //         ].find((formatoAceito) => formatoAceito === file.mimetype);
-            //         if (extensaoImagens) {
-            //             return cb(null, true);
-            //         }
-            //         return cb(null, false);
-            //     },
-            // });
+            form.parse(req, (err: any, fields: any, files: any) => {
+                console.log(fields);
+                const imagem: any = JSON.parse(
+                    JSON.stringify(files.imagem, null, 2)
+                );
+                const caminhoAntigo = imagem.filepath;
+                const nome = `${Date.now().toString()}_${
+                    imagem.originalFilename
+                }`;
+                const caminhoNovo = `./public/imagens/${nome}`;
+                fs.rename(caminhoAntigo, caminhoNovo, (error: any) => {
+                    if (error) {
+                        return res.status(500).json(error);
+                    }
+                    return res.status(200).json({
+                        url: caminhoNovo,
+                        nome: nome,
+                    });
+                });
+            });
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                return res.status(500).json(error);
+            } else if (error instanceof Error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    };
+
+    static criarImagem = async (req: Request, res: Response, next: any) => {
+        const { imagem } = req.body;
+        try {
+            return res.status(200).json();
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);

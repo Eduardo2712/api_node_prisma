@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
+const formidable = require("formidable");
+const fs = require("fs");
+const form = new formidable.IncomingForm();
 
 const prisma = new PrismaClient();
 
@@ -181,7 +184,19 @@ class AnuncioController {
 
     static criarAnuncio = async (req: Request, res: Response) => {
         try {
-            return res.status(200).json();
+            form.parse(req, (err: any, fields: any, files: any) => {
+                const arquivos: any = JSON.parse(JSON.stringify(files));
+                const nomeAntigo = arquivos.imagem.filepath;
+                const nomeNovo = `./public/imagens/${Date.now().toString()}_${
+                    arquivos.imagem.originalFilename
+                }`;
+                fs.rename(nomeAntigo, nomeNovo, (error: any) => {
+                    if (error) {
+                        return res.status(500).json(error);
+                    }
+                    return res.status(200).json();
+                });
+            });
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
