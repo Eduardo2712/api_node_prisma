@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const formidable = require("formidable");
 const fs = require("fs");
