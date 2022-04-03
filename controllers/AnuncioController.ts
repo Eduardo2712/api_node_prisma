@@ -183,20 +183,12 @@ class AnuncioController {
     };
 
     static criarAnuncio = async (req: Request, res: Response) => {
+        const novoAnuncio = req.body;
         try {
-            form.parse(req, (err: any, fields: any, files: any) => {
-                const arquivos: any = JSON.parse(JSON.stringify(files));
-                const nomeAntigo = arquivos.imagem.filepath;
-                const nomeNovo = `./public/imagens/${Date.now().toString()}_${
-                    arquivos.imagem.originalFilename
-                }`;
-                fs.rename(nomeAntigo, nomeNovo, (error: any) => {
-                    if (error) {
-                        return res.status(500).json(error);
-                    }
-                    return res.status(200).json();
-                });
+            const novoAnuncioCriado = await prisma.anuncios.create({
+                data: novoAnuncio,
             });
+            return res.status(201).json(novoAnuncioCriado);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
