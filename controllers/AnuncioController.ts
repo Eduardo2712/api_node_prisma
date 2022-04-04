@@ -1,8 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-const formidable = require("formidable");
-const fs = require("fs");
-const form = new formidable.IncomingForm();
 
 const prisma = new PrismaClient();
 
@@ -186,7 +183,9 @@ class AnuncioController {
         const novoAnuncio = req.body;
         try {
             const novoAnuncioCriado = await prisma.anuncios.create({
-                data: novoAnuncio,
+                data: {
+                    ...novoAnuncio,
+                },
             });
             return res.status(201).json(novoAnuncioCriado);
         } catch (error: unknown) {
