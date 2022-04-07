@@ -1,6 +1,9 @@
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const formidable = require("formidable");
 const fs = require("fs");
+
+const prisma = new PrismaClient();
 
 class ImagemController {
     static subirImagem = (req: Request, res: Response) => {
@@ -37,10 +40,13 @@ class ImagemController {
         }
     };
 
-    static criarImagem = async (req: Request, res: Response, next: any) => {
-        const { imagem } = req.body;
+    static criarImagem = async (req: Request, res: Response) => {
+        const { imagens } = req.body;
         try {
-            return res.status(200).json();
+            const novasImagens = await prisma.imagens.createMany({
+                data: imagens,
+            });
+            return res.status(200).json(novasImagens);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
