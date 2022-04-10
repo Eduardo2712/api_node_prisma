@@ -1,10 +1,13 @@
 const expressImagens = require("express");
 const imagemController = require("../controllers/ImagemController");
+const subirImagens = require("../funcoes/imagens/subirImagens");
 
 const routerImagens = expressImagens.Router();
 
-routerImagens
-    .post("/subir_imagens", imagemController.subirImagem)
-    .post("/criar_imagens", imagemController.criarImagem);
+routerImagens.post(
+    "/subir_imagens",
+    subirImagens.array("imagens", 10),
+    imagemController.criarImagem
+);
 
 module.exports = routerImagens;

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { imagens, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const formidable = require("formidable");
 const fs = require("fs");
@@ -6,52 +6,36 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 
 class ImagemController {
-    static subirImagem = (req: Request, res: Response) => {
+    static criarImagem = async (req: any, res: Response) => {
+        const imagens = req.files;
+        const dados = JSON.parse(JSON.stringify(req.body, null, 2));
         try {
-            const form = new formidable.IncomingForm();
-            form.parse(req, (err: Error, fields: any, files: any) => {
-                if (err) {
-                    return res.status(500).json(err);
-                } else {
-                    const imagem = JSON.parse(JSON.stringify(files.imagem));
-                    const caminhoAntigo = imagem.filepath;
-                    const nome = `${Date.now().toString()}_${
-                        imagem.originalFilename
-                    }`;
-                    const caminhoNovo = `./public/imagens/${nome}`;
-                    fs.rename(caminhoAntigo, caminhoNovo, (error: Error) => {
-                        if (error) {
-                            return res.status(500).json(error);
-                        } else {
-                            return res.status(200).json({
-                                url: caminhoNovo,
-                                nome: nome,
-                            });
-                        }
-                    });
-                }
+            const dadosInserir: Array<any> = [];
+            Array.from(imagens).forEach(async (imagem: any, index) => {
+                const novaImagem = {
+                    nome: imagem.filename,
+                    caminho: imagem.path.replaceAll("\\", "/"),
+                    principal:
+                        index === Number(dados.idImagemPrincipal)
+                            ? true
+                            : false,
+                    id_anuncio: Number(dados.idAnuncio),
+                };
+                dadosInserir.push(novaImagem);
             });
-        } catch (error: unknown) {
-            if (typeof error === "string") {
-                return res.status(500).json(error);
-            } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
-            }
-        }
-    };
-
-    static criarImagem = async (req: Request, res: Response) => {
-        const { imagens } = req.body;
-        try {
             const novasImagens = await prisma.imagens.createMany({
-                data: imagens,
+                data: [...dadosInserir],
             });
             return res.status(200).json(novasImagens);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({
+                    erro: error,
+                });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
