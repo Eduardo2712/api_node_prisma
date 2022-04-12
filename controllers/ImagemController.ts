@@ -6,11 +6,13 @@ const fs = require("fs");
 const prisma = new PrismaClient();
 
 class ImagemController {
-    static criarImagem = async (req: any, res: Response) => {
+    static subirImagens = async (req: any, res: Response) => {
         const imagens = req.files;
         const dados = JSON.parse(JSON.stringify(req.body, null, 2));
         try {
             const dadosInserir: Array<any> = [];
+            const dataAtual = new Date(Date.now());
+            dataAtual.setHours(dataAtual.getHours() - 3);
             Array.from(imagens).forEach(async (imagem: any, index) => {
                 const novaImagem = {
                     nome: imagem.filename,
@@ -20,6 +22,8 @@ class ImagemController {
                             ? true
                             : false,
                     id_anuncio: Number(dados.idAnuncio),
+                    data_criado: dataAtual,
+                    data_atualizado: dataAtual,
                 };
                 dadosInserir.push(novaImagem);
             });

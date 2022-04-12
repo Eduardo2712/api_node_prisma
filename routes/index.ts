@@ -4,6 +4,7 @@ const anuncios = require("./anunciosRoute");
 const tipoAnuncios = require("./tipoAnunciosRoute");
 const imagens = require("./imagensRoute");
 const cors = require("cors");
+const express = require("express");
 
 module.exports = (app: any) => {
     app.use(
@@ -13,6 +14,7 @@ module.exports = (app: any) => {
         anuncios,
         imagens,
         tipoAnuncios,
+        express.static("public"),
         cors()
     );
 };

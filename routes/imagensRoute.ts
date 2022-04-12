@@ -7,7 +7,7 @@ const routerImagens = expressImagens.Router();
 routerImagens.post(
     "/subir_imagens",
     subirImagens.array("imagens", 10),
-    imagemController.criarImagem
+    imagemController.subirImagens
 );
 
 module.exports = routerImagens;

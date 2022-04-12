@@ -108,7 +108,11 @@ class AnuncioController {
                     data_criado: "desc",
                 },
                 include: {
-                    imagens: true,
+                    imagens: {
+                        where: {
+                            principal: true,
+                        },
+                    },
                     tipo_anuncios: {
                         select: {
                             nome: true,
@@ -152,7 +156,11 @@ class AnuncioController {
                     data_criado: "desc",
                 },
                 include: {
-                    imagens: true,
+                    imagens: {
+                        where: {
+                            principal: true,
+                        },
+                    },
                     tipo_anuncios: {
                         select: {
                             nome: true,
