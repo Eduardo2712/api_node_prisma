@@ -6,10 +6,6 @@ const routerAnuncios = expressAnuncios.Router();
 routerAnuncios
     .get("/anuncios/:id", anuncioController.pegarUmAnuncio)
     .get(
-        "/anuncios_pagina/:quantidade/:pagina",
-        anuncioController.pegarAnunciosPorPagina
-    )
-    .get(
         "/anuncios_recentes/:quantidade",
         anuncioController.pegarAnunciosRecentes
     )
@@ -17,6 +13,7 @@ routerAnuncios
         "/anuncios_patrocinados/:quantidade",
         anuncioController.pegarAnunciosPatrocinados
     )
-    .post("/criar_anuncio", anuncioController.criarAnuncio);
+    .post("/criar_anuncio", anuncioController.criarAnuncio)
+    .get("/pesquisar_anuncios", anuncioController.pesquisarAnuncios);
 
 module.exports = routerAnuncios;

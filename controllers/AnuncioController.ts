@@ -204,6 +204,26 @@ class AnuncioController {
             }
         }
     };
+
+    static pesquisarAnuncios = async (req: Request, res: Response) => {
+        try {
+            const { busca, estado, cidade, tipo } = req.query;
+            const anuncios = await prisma.anuncios.findMany({
+                where: {
+                    titulo: {
+                        contains: busca as string,
+                    },
+                },
+            });
+            return res.status(200).json(anuncios);
+        } catch (error: unknown) {
+            if (typeof error === "string") {
+                return res.status(500).json(error);
+            } else if (error instanceof Error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    };
 }
 
 module.exports = AnuncioController;
