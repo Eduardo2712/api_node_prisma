@@ -207,13 +207,69 @@ class AnuncioController {
 
     static pesquisarAnuncios = async (req: Request, res: Response) => {
         try {
-            const { busca, estado, cidade, tipo } = req.query;
+            const { busca, estado, cidade, tipo, quantidade, pagina } =
+                req.query;
+            if (
+                isNaN(Number(quantidade)) ||
+                isNaN(Number(pagina)) ||
+                Number(quantidade) < 1 ||
+                Number(pagina) < 0
+            ) {
+                return res.status(400).json({
+                    mensagem:
+                        "Quantidade e/ou página não é/são número(s) válidos",
+                });
+            }
             const anuncios = await prisma.anuncios.findMany({
-                where: {
-                    titulo: {
-                        contains: busca as string,
+                include: {
+                    imagens: {
+                        where: {
+                            principal: true,
+                        },
+                    },
+                    tipo_anuncios: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    usuarios: {
+                        select: {
+                            nome: true,
+                            email: true,
+                            telefone: true,
+                        },
                     },
                 },
+                where: {
+                    OR: [
+                        {
+                            titulo: {
+                                contains: busca as string,
+                            },
+                        },
+                    ],
+                    AND: [
+                        {
+                            cidade: {
+                                contains: cidade as string,
+                            },
+                        },
+                        {
+                            estado: {
+                                contains: estado as string,
+                            },
+                        },
+                        Number(tipo) !== 0 && !isNaN(Number(tipo))
+                            ? {
+                                  id_tipo_anuncio: {
+                                      equals: Number(tipo),
+                                  },
+                              }
+                            : {},
+                    ],
+                },
+                skip: Number(quantidade) * Number(pagina),
+                take: Number(quantidade),
             });
             return res.status(200).json(anuncios);
         } catch (error: unknown) {
