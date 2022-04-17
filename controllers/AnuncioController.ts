@@ -220,6 +220,36 @@ class AnuncioController {
                         "Quantidade e/ou página não é/são número(s) válidos",
                 });
             }
+            const quantidadeAnuncios = await prisma.anuncios.count({
+                where: {
+                    OR: [
+                        {
+                            titulo: {
+                                contains: busca as string,
+                            },
+                        },
+                    ],
+                    AND: [
+                        {
+                            cidade: {
+                                contains: cidade as string,
+                            },
+                        },
+                        {
+                            estado: {
+                                contains: estado as string,
+                            },
+                        },
+                        Number(tipo) !== 0 && !isNaN(Number(tipo))
+                            ? {
+                                  id_tipo_anuncio: {
+                                      equals: Number(tipo),
+                                  },
+                              }
+                            : {},
+                    ],
+                },
+            });
             const anuncios = await prisma.anuncios.findMany({
                 include: {
                     imagens: {
@@ -271,7 +301,11 @@ class AnuncioController {
                 skip: Number(quantidade) * Number(pagina),
                 take: Number(quantidade),
             });
-            return res.status(200).json(anuncios);
+            const resposta = {
+                anuncios: anuncios,
+                quantidade: quantidadeAnuncios,
+            };
+            return res.status(200).json(resposta);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json(error);
