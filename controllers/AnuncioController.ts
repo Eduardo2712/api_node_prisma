@@ -213,7 +213,7 @@ class AnuncioController {
                 isNaN(Number(quantidade)) ||
                 isNaN(Number(pagina)) ||
                 Number(quantidade) < 1 ||
-                Number(pagina) < 0
+                Number(pagina) < 1
             ) {
                 return res.status(400).json({
                     mensagem:
@@ -234,6 +234,9 @@ class AnuncioController {
                             cidade: {
                                 contains: cidade as string,
                             },
+                        },
+                        {
+                            ativo: 1,
                         },
                         {
                             estado: {
@@ -285,6 +288,9 @@ class AnuncioController {
                             },
                         },
                         {
+                            ativo: 1,
+                        },
+                        {
                             estado: {
                                 contains: estado as string,
                             },
@@ -298,12 +304,13 @@ class AnuncioController {
                             : {},
                     ],
                 },
-                skip: Number(quantidade) * Number(pagina),
+                skip: Number(quantidade) * (Number(pagina) - 1),
                 take: Number(quantidade),
             });
             const resposta = {
                 anuncios: anuncios,
-                quantidade: quantidadeAnuncios,
+                quantidade: Math.ceil(quantidadeAnuncios / Number(quantidade)),
+                totalAnuncios: quantidadeAnuncios,
             };
             return res.status(200).json(resposta);
         } catch (error: unknown) {
