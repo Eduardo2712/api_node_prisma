@@ -90,34 +90,16 @@ model valores {
   @@index([id_anuncio], map: "id_anuncio")
 }
 
-model paises {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(255)
-  nome_ptbr String    @db.VarChar(255)
-  sigla     String    @db.VarChar(255)
-  bacen     Int
-  estados   estados[]
-}
-
 model estados {
   id      Int       @id @default(autoincrement())
-  nome    String    @db.VarChar(255)
-  uf      String    @db.VarChar(255)
-  ibge    Int
-  pais    Int
-  ddd     String    @db.VarChar(255)
-  paises  paises    @relation(fields: [pais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "estados_ibfk_1")
+  nome    String    @db.VarChar(100)
+  uf      String    @db.VarChar(100)
   cidades cidades[]
-
-  @@index([pais], map: "estados_ibfk_1")
 }
 
 model cidades {
-  id      Int     @id @default(autoincrement())
-  nome    String  @db.VarChar(255)
-  uf      Int
-  ibge    Int
-  estados estados @relation(fields: [uf], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cidades_ibfk_1")
-
-  @@index([uf], map: "cidades_ibfk_1")
+  id        Int     @id @default(autoincrement())
+  nome      String  @db.VarChar(100)
+  id_estado Int
+  estados   estados @relation(fields: [id_estado], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cidades_ibfk_1")
 }

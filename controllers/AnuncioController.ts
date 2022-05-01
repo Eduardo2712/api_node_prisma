@@ -198,12 +198,34 @@ class AnuncioController {
     static criarAnuncio = async (req: Request, res: Response) => {
         const novoAnuncio = req.body;
         try {
-            const novoAnuncioCriado = await prisma.anuncios.create({
-                data: {
-                    ...novoAnuncio,
-                },
-            });
-            return res.status(201).json(novoAnuncioCriado);
+            if (novoAnuncio.estado) {
+                const estado = await prisma.estados.findFirst({
+                    select: {
+                        id: true,
+                    },
+                    where: {
+                        uf: novoAnuncio.estado.toString().toUpperCase(),
+                    },
+                });
+                novoAnuncio.id_estado = estado?.id;
+            }
+            if (novoAnuncio.cidade) {
+                const cidade = await prisma.cidades.findFirst({
+                    select: {
+                        id: true,
+                    },
+                    where: {
+                        nome: novoAnuncio.cidade.toString().toUpperCase(),
+                    },
+                });
+                novoAnuncio.id_cidade = cidade?.id;
+            }
+            // const novoAnuncioCriado = await prisma.anuncios.create({
+            //     data: {
+            //         ...novoAnuncio,
+            //     },
+            // });
+            return res.status(201).json("novoAnuncioCriado");
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json({ erro: error });

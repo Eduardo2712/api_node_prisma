@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { usuariosSemente } from "../data/usuarios";
 import { anunciosSemente } from "../data/anuncios";
+import { estadosSemente } from "../data/estados";
 import { tipoAnunciosSemente } from "../data/tipo_anuncios";
 import { imagensSemente } from "../data/imagens";
 
@@ -18,6 +19,9 @@ const main = async () => {
     });
     await prisma.imagens.createMany({
         data: imagensSemente,
+    });
+    await prisma.estados.createMany({
+        data: estadosSemente,
     });
 };
 
