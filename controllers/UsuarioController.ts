@@ -13,9 +13,11 @@ class UsuarioController {
             return res.status(200).json(usuarios);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -31,9 +33,11 @@ class UsuarioController {
             return res.status(200).json(usuario);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -52,9 +56,11 @@ class UsuarioController {
             return res.status(201).json(novoUsuarioCriado);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -96,6 +102,13 @@ class UsuarioController {
                             nome: usuario["nome"],
                             id: usuario["id"],
                             email: usuario["email"],
+                            rua: usuario["rua"],
+                            numero: usuario["numero"],
+                            bairro: usuario["bairro"],
+                            cidade: usuario["cidade"],
+                            estado: usuario["estado"],
+                            cep: usuario["cep"],
+                            telefone: usuario["telefone"],
                         },
                     });
                 } else {
@@ -112,9 +125,11 @@ class UsuarioController {
             }
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };

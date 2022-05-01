@@ -3,6 +3,7 @@ const usuarios = require("./usuariosRoute");
 const anuncios = require("./anunciosRoute");
 const tipoAnuncios = require("./tipoAnunciosRoute");
 const imagens = require("./imagensRoute");
+const estados = require("./estadosRoute");
 const cors = require("cors");
 const express = require("express");
 
@@ -14,6 +15,7 @@ module.exports = (app: any) => {
         anuncios,
         imagens,
         tipoAnuncios,
+        estados,
         express.static("public"),
         cors()
     );

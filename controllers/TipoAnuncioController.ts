@@ -25,9 +25,11 @@ class TipoAnuncioController {
             return res.status(200).json(tipoAnuncio);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -43,9 +45,11 @@ class TipoAnuncioController {
             return res.status(200).json(tipoAnuncios);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };

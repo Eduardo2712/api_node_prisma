@@ -1,91 +1,123 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model anuncios {
-    id              Int           @id @default(autoincrement())
-    id_usuario      Int
-    id_tipo_anuncio Int
-    titulo          String        @db.VarChar(255)
-    descricao       String        @db.Text
-    valor           Int
-    data_criado     DateTime?     @default(now()) @db.DateTime(0)
-    data_atualizado DateTime?     @default(now()) @db.DateTime(0)
-    ativo           Int           @db.TinyInt
-    patrocinado     Int           @db.TinyInt
-    cep             String?       @db.VarChar(255)
-    rua             String        @db.VarChar(255)
-    cidade          String        @db.VarChar(255)
-    numero          String        @db.VarChar(255)
-    complemento     String?       @db.VarChar(255)
-    bairro          String        @db.VarChar(255)
-    estado          String        @db.VarChar(255)
-    tipo_anuncios   tipo_anuncios @relation(fields: [id_tipo_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_2")
-    usuarios        usuarios      @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_1")
-    imagens         imagens[]
-    valores         valores[]
+  id              Int           @id @default(autoincrement())
+  id_usuario      Int
+  id_tipo_anuncio Int
+  titulo          String        @db.VarChar(255)
+  descricao       String        @db.Text
+  valor           Int
+  data_criado     DateTime?     @default(now()) @db.DateTime(0)
+  data_atualizado DateTime?     @default(now()) @db.DateTime(0)
+  ativo           Int           @db.TinyInt
+  patrocinado     Int           @db.TinyInt
+  cep             String?       @db.VarChar(255)
+  rua             String        @db.VarChar(255)
+  cidade          String        @db.VarChar(255)
+  numero          String        @db.VarChar(255)
+  complemento     String?       @db.VarChar(255)
+  bairro          String        @db.VarChar(255)
+  estado          String        @db.VarChar(255)
+  tipo_anuncios   tipo_anuncios @relation(fields: [id_tipo_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_2")
+  usuarios        usuarios      @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_1")
+  imagens         imagens[]
+  valores         valores[]
 
-    @@index([id_tipo_anuncio], map: "id_tipo_anuncio")
-    @@index([id_usuario], map: "id_usuario")
+  @@index([id_tipo_anuncio], map: "id_tipo_anuncio")
+  @@index([id_usuario], map: "id_usuario")
 }
 
 model imagens {
-    id              Int       @id @default(autoincrement())
-    nome            String    @db.VarChar(255)
-    caminho         String    @db.VarChar(255)
-    id_anuncio      Int
-    principal       Boolean
-    data_criado     DateTime? @default(now()) @db.DateTime(0)
-    data_atualizado DateTime? @default(now()) @db.DateTime(0)
-    anuncios        anuncios  @relation(fields: [id_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "imagens_ibfk_1")
+  id              Int       @id @default(autoincrement())
+  nome            String    @db.VarChar(255)
+  caminho         String    @db.VarChar(255)
+  id_anuncio      Int
+  principal       Boolean
+  data_criado     DateTime? @default(now()) @db.DateTime(0)
+  data_atualizado DateTime? @default(now()) @db.DateTime(0)
+  anuncios        anuncios  @relation(fields: [id_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "imagens_ibfk_1")
 
-    @@index([id_anuncio], map: "id_anuncio")
+  @@index([id_anuncio], map: "id_anuncio")
 }
 
 model tipo_anuncios {
-    id              Int        @id @default(autoincrement())
-    nome            String     @db.VarChar(255)
-    data_criado     DateTime?  @default(now()) @db.DateTime(0)
-    data_atualizado DateTime?  @default(now()) @db.DateTime(0)
-    anuncios        anuncios[]
+  id              Int        @id @default(autoincrement())
+  nome            String     @db.VarChar(255)
+  data_criado     DateTime?  @default(now()) @db.DateTime(0)
+  data_atualizado DateTime?  @default(now()) @db.DateTime(0)
+  anuncios        anuncios[]
 }
 
 model usuarios {
-    id              Int        @id @default(autoincrement())
-    nome            String     @db.VarChar(255)
-    ativo           Int        @default(1)
-    id_senha        Int
-    email           String     @unique @db.VarChar(255)
-    telefone        String     @db.VarChar(255)
-    data_nasc       DateTime   @db.Date
-    cpf             String     @db.VarChar(255)
-    login           String     @db.VarChar(255)
-    senha           String     @db.VarChar(255)
-    cep             String?    @db.VarChar(255)
-    rua             String     @db.VarChar(255)
-    cidade          String     @db.VarChar(255)
-    numero          String     @db.VarChar(255)
-    complemento     String?    @db.VarChar(255)
-    bairro          String     @db.VarChar(255)
-    estado          String     @db.VarChar(255)
-    data_criado     DateTime?  @default(now()) @db.DateTime(0)
-    data_atualizado DateTime?  @default(now()) @db.DateTime(0)
-    anuncios        anuncios[]
+  id              Int        @id @default(autoincrement())
+  nome            String     @db.VarChar(255)
+  ativo           Int        @default(1)
+  id_senha        Int
+  email           String     @unique @db.VarChar(255)
+  telefone        String     @db.VarChar(255)
+  data_nasc       DateTime   @db.Date
+  cpf             String     @db.VarChar(255)
+  login           String     @db.VarChar(255)
+  senha           String     @db.VarChar(255)
+  data_criado     DateTime?  @default(now()) @db.DateTime(0)
+  data_atualizado DateTime?  @default(now()) @db.DateTime(0)
+  bairro          String     @db.VarChar(255)
+  cep             String?    @db.VarChar(255)
+  cidade          String     @db.VarChar(255)
+  complemento     String?    @db.VarChar(255)
+  estado          String     @db.VarChar(255)
+  numero          String     @db.VarChar(255)
+  rua             String     @db.VarChar(255)
+  anuncios        anuncios[]
 }
 
 model valores {
-    id              Int       @id @default(autoincrement())
-    valor           Int
-    ativo           Int       @default(1)
-    id_anuncio      Int
-    data_criado     DateTime? @default(now()) @db.DateTime(0)
-    data_atualizado DateTime? @default(now()) @db.DateTime(0)
-    anuncios        anuncios  @relation(fields: [id_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "valores_ibfk_1")
+  id              Int       @id @default(autoincrement())
+  valor           Int
+  ativo           Int       @default(1)
+  id_anuncio      Int
+  data_criado     DateTime? @default(now()) @db.DateTime(0)
+  data_atualizado DateTime? @default(now()) @db.DateTime(0)
+  anuncios        anuncios  @relation(fields: [id_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "valores_ibfk_1")
 
-    @@index([id_anuncio], map: "id_anuncio")
+  @@index([id_anuncio], map: "id_anuncio")
+}
+
+model paises {
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(255)
+  nome_ptbr String    @db.VarChar(255)
+  sigla     String    @db.VarChar(255)
+  bacen     Int
+  estados   estados[]
+}
+
+model estados {
+  id      Int       @id @default(autoincrement())
+  nome    String    @db.VarChar(255)
+  uf      String    @db.VarChar(255)
+  ibge    Int
+  pais    Int
+  ddd     String    @db.VarChar(255)
+  paises  paises    @relation(fields: [pais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "estados_ibfk_1")
+  cidades cidades[]
+
+  @@index([pais], map: "estados_ibfk_1")
+}
+
+model cidades {
+  id      Int     @id @default(autoincrement())
+  nome    String  @db.VarChar(255)
+  uf      Int
+  ibge    Int
+  estados estados @relation(fields: [uf], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cidades_ibfk_1")
+
+  @@index([uf], map: "cidades_ibfk_1")
 }

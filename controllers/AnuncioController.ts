@@ -40,9 +40,11 @@ class AnuncioController {
             return res.status(200).json(anuncio);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -85,9 +87,11 @@ class AnuncioController {
             return res.status(200).json(anuncios);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -132,9 +136,11 @@ class AnuncioController {
             return res.status(200).json(anuncios);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -180,9 +186,11 @@ class AnuncioController {
             return res.status(200).json(anuncios);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -198,9 +206,11 @@ class AnuncioController {
             return res.status(201).json(novoAnuncioCriado);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({ erro: error });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
@@ -222,28 +232,38 @@ class AnuncioController {
             }
             const quantidadeAnuncios = await prisma.anuncios.count({
                 where: {
-                    OR: [
-                        {
-                            titulo: {
-                                contains: busca as string,
-                            },
-                        },
-                    ],
                     AND: [
-                        {
-                            cidade: {
-                                contains: cidade as string,
-                            },
-                        },
+                        busca
+                            ? {
+                                  titulo: {
+                                      contains: busca
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
+                        cidade
+                            ? {
+                                  cidade: {
+                                      contains: cidade
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
                         {
                             ativo: 1,
                         },
-                        {
-                            estado: {
-                                contains: estado as string,
-                            },
-                        },
-                        Number(tipo) !== 0 && !isNaN(Number(tipo))
+                        estado
+                            ? {
+                                  estado: {
+                                      contains: estado
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
+                        Number(tipo) !== 0
                             ? {
                                   id_tipo_anuncio: {
                                       equals: Number(tipo),
@@ -274,28 +294,38 @@ class AnuncioController {
                     },
                 },
                 where: {
-                    OR: [
-                        {
-                            titulo: {
-                                contains: busca as string,
-                            },
-                        },
-                    ],
                     AND: [
-                        {
-                            cidade: {
-                                contains: cidade as string,
-                            },
-                        },
+                        busca
+                            ? {
+                                  titulo: {
+                                      contains: busca
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
+                        cidade
+                            ? {
+                                  cidade: {
+                                      contains: cidade
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
                         {
                             ativo: 1,
                         },
-                        {
-                            estado: {
-                                contains: estado as string,
-                            },
-                        },
-                        Number(tipo) !== 0 && !isNaN(Number(tipo))
+                        estado
+                            ? {
+                                  estado: {
+                                      contains: estado
+                                          .toString()
+                                          .toLocaleUpperCase(),
+                                  },
+                              }
+                            : {},
+                        Number(tipo) !== 0
                             ? {
                                   id_tipo_anuncio: {
                                       equals: Number(tipo),
@@ -315,9 +345,13 @@ class AnuncioController {
             return res.status(200).json(resposta);
         } catch (error: unknown) {
             if (typeof error === "string") {
-                return res.status(500).json(error);
+                return res.status(500).json({
+                    erro: error,
+                });
             } else if (error instanceof Error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({
+                    erro: error.message,
+                });
             }
         }
     };
