@@ -30,6 +30,16 @@ class AnuncioController {
                             telefone: true,
                         },
                     },
+                    cidades: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    estados: {
+                        select: {
+                            nome: true,
+                        },
+                    },
                 },
             });
             if (anuncio === null || typeof anuncio === "undefined") {
@@ -220,11 +230,11 @@ class AnuncioController {
                 });
                 novoAnuncio.id_cidade = cidade?.id;
             }
-            // const novoAnuncioCriado = await prisma.anuncios.create({
-            //     data: {
-            //         ...novoAnuncio,
-            //     },
-            // });
+            const novoAnuncioCriado = await prisma.anuncios.create({
+                data: {
+                    ...novoAnuncio,
+                },
+            });
             return res.status(201).json("novoAnuncioCriado");
         } catch (error: unknown) {
             if (typeof error === "string") {
@@ -266,10 +276,8 @@ class AnuncioController {
                             : {},
                         cidade
                             ? {
-                                  cidade: {
-                                      contains: cidade
-                                          .toString()
-                                          .toLocaleUpperCase(),
+                                  id_cidade: {
+                                      equals: Number(cidade),
                                   },
                               }
                             : {},
@@ -278,10 +286,8 @@ class AnuncioController {
                         },
                         estado
                             ? {
-                                  estado: {
-                                      contains: estado
-                                          .toString()
-                                          .toLocaleUpperCase(),
+                                  id_estado: {
+                                      equals: Number(estado),
                                   },
                               }
                             : {},
@@ -314,6 +320,16 @@ class AnuncioController {
                             telefone: true,
                         },
                     },
+                    cidades: {
+                        select: {
+                            nome: true,
+                        },
+                    },
+                    estados: {
+                        select: {
+                            uf: true,
+                        },
+                    },
                 },
                 where: {
                     AND: [
@@ -328,10 +344,8 @@ class AnuncioController {
                             : {},
                         cidade
                             ? {
-                                  cidade: {
-                                      contains: cidade
-                                          .toString()
-                                          .toLocaleUpperCase(),
+                                  id_cidade: {
+                                      equals: Number(cidade),
                                   },
                               }
                             : {},
@@ -340,10 +354,8 @@ class AnuncioController {
                         },
                         estado
                             ? {
-                                  estado: {
-                                      contains: estado
-                                          .toString()
-                                          .toLocaleUpperCase(),
+                                  id_estado: {
+                                      equals: Number(estado),
                                   },
                               }
                             : {},
@@ -359,8 +371,15 @@ class AnuncioController {
                 skip: Number(quantidade) * (Number(pagina) - 1),
                 take: Number(quantidade),
             });
+            const anuncios_por_estado = await prisma.anuncios.groupBy({
+                by: ["id_estado"],
+                _count: {
+                    id_estado: true,
+                },
+            });
             const resposta = {
-                anuncios: anuncios,
+                anuncios,
+                anuncios_por_estado,
                 quantidade: Math.ceil(quantidadeAnuncios / Number(quantidade)),
                 totalAnuncios: quantidadeAnuncios,
             };

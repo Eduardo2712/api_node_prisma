@@ -20,16 +20,20 @@ model anuncios {
   patrocinado     Int           @db.TinyInt
   cep             String?       @db.VarChar(255)
   rua             String        @db.VarChar(255)
-  cidade          String        @db.VarChar(255)
   numero          String        @db.VarChar(255)
   complemento     String?       @db.VarChar(255)
   bairro          String        @db.VarChar(255)
-  estado          String        @db.VarChar(255)
+  id_cidade       Int
+  id_estado       Int
+  cidades         cidades       @relation(fields: [id_cidade], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_3")
+  estados         estados       @relation(fields: [id_estado], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_4")
   tipo_anuncios   tipo_anuncios @relation(fields: [id_tipo_anuncio], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_2")
   usuarios        usuarios      @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "anuncios_ibfk_1")
   imagens         imagens[]
   valores         valores[]
 
+  @@index([id_cidade], map: "anuncios_ibfk_3")
+  @@index([id_estado], map: "anuncios_ibfk_4")
   @@index([id_tipo_anuncio], map: "id_tipo_anuncio")
   @@index([id_usuario], map: "id_usuario")
 }
@@ -70,11 +74,11 @@ model usuarios {
   data_atualizado DateTime?  @default(now()) @db.DateTime(0)
   bairro          String     @db.VarChar(255)
   cep             String?    @db.VarChar(255)
-  cidade          String     @db.VarChar(255)
   complemento     String?    @db.VarChar(255)
-  estado          String     @db.VarChar(255)
   numero          String     @db.VarChar(255)
   rua             String     @db.VarChar(255)
+  id_cidade       Int
+  id_estado       Int
   anuncios        anuncios[]
 }
 
@@ -91,15 +95,19 @@ model valores {
 }
 
 model estados {
-  id      Int       @id @default(autoincrement())
-  nome    String    @db.VarChar(100)
-  uf      String    @db.VarChar(100)
-  cidades cidades[]
+  id       Int        @id @default(autoincrement())
+  nome     String     @db.VarChar(100)
+  uf       String     @db.VarChar(100)
+  anuncios anuncios[]
+  cidades  cidades[]
 }
 
 model cidades {
-  id        Int     @id @default(autoincrement())
-  nome      String  @db.VarChar(100)
+  id        Int        @id @default(autoincrement())
+  nome      String     @db.VarChar(100)
   id_estado Int
-  estados   estados @relation(fields: [id_estado], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cidades_ibfk_1")
+  estados   estados    @relation(fields: [id_estado], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cidades_ibfk_1")
+  anuncios  anuncios[]
+
+  @@index([id_estado], map: "cidades_ibfk_1")
 }

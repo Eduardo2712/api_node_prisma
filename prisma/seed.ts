@@ -4,10 +4,17 @@ import { anunciosSemente } from "../data/anuncios";
 import { estadosSemente } from "../data/estados";
 import { tipoAnunciosSemente } from "../data/tipo_anuncios";
 import { imagensSemente } from "../data/imagens";
+import { cidadesSemente } from "../data/cidades";
 
 const prisma = new PrismaClient();
 
 const main = async () => {
+    await prisma.estados.createMany({
+        data: estadosSemente,
+    });
+    await prisma.cidades.createMany({
+        data: cidadesSemente,
+    });
     await prisma.usuarios.createMany({
         data: usuariosSemente,
     });
@@ -19,9 +26,6 @@ const main = async () => {
     });
     await prisma.imagens.createMany({
         data: imagensSemente,
-    });
-    await prisma.estados.createMany({
-        data: estadosSemente,
     });
 };
 
