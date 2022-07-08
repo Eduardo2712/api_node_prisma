@@ -235,7 +235,7 @@ class AnuncioController {
                     ...novoAnuncio,
                 },
             });
-            return res.status(201).json("novoAnuncioCriado");
+            return res.status(201).json(novoAnuncioCriado);
         } catch (error: unknown) {
             if (typeof error === "string") {
                 return res.status(500).json({ erro: error });
